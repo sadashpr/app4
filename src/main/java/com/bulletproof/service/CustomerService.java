@@ -68,7 +68,8 @@ public class CustomerService {
 	session.flush();
 	session.clear();
 	tx.commit();
-	session.close();
+	//dont close session
+	//session.close();
     }
 
 }

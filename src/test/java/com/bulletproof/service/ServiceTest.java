@@ -75,8 +75,8 @@ public class ServiceTest {
 	@Test
 	public void batchSaveTest() {
 
-		Customer c3 = new Customer("john", "tester", "sydney");
-		Customer c4 = new Customer("john", "developer", "bangalore");
+		Customer c3 = new Customer("johhny", "tester", "sydney");
+		Customer c4 = new Customer("johhny", "developer", "bangalore");
 		Customer[] customers = new Customer[2];
 		
 		customers[0] = c3;
@@ -84,6 +84,9 @@ public class ServiceTest {
 
 		customerService.batchSave(customers);
 
+		Customer[] fetchedCustomers = customerService.findCustomerByFirstname("johhny");
+
+		assertEquals(fetchedCustomers[0].getCity(), c3.getCity());
 	}
 
 }
