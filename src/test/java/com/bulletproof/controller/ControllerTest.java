@@ -46,13 +46,12 @@ public class ControllerTest {
     ObjectMapper objectMapper;
 
     Customer[] customerArray = new Customer[2];
-
+    Customer c1 = new Customer("john", "tester", "sydney");
+	Customer c2 = new Customer("john", "developer", "bangalore");
+	
     @Before
     public void setUp() throws Exception {
 	MockitoAnnotations.initMocks(this);
-
-	Customer c1 = new Customer("pradeep", "sadashiv", "sydney");
-	Customer c2 = new Customer("pradeep", "madkaiker", "bangalore");
 
 	customerArray[0] = c1;
 	customerArray[1] = c2;
@@ -75,30 +74,26 @@ public class ControllerTest {
     @Test
     public void addCustomerTest() throws Exception {
 
-	Customer c = new Customer("pradeep", " sadashiv", "sydney");
-
-	mockMvc.perform(MockMvcRequestBuilders.post("/rest/addacustomer").contentType(MediaType.APPLICATION_JSON)
-		.content(objectMapper.writeValueAsString(c))).andExpect(status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/rest/addacustomer").contentType(MediaType.APPLICATION_JSON)
+		.content(objectMapper.writeValueAsString(c1))).andExpect(status().isOk());
     }
 
     @Test
     public void addmanyCustomerTest() throws Exception {
 
-	mockMvc.perform(MockMvcRequestBuilders.post("/rest/addacustomer").contentType(MediaType.APPLICATION_JSON)
+	mockMvc.perform(MockMvcRequestBuilders.post("/rest/addallcustomer").contentType(MediaType.APPLICATION_JSON)
 		.content(objectMapper.writeValueAsString(customerArray))).andExpect(status().isOk());
     }
 
     @Test
     public void searchACustomerbyIDTest() throws Exception {
 
-	Customer c1 = new Customer("pradeep", " sadashiv", "sydney");
-
 	Mockito.when(service.findOne(Matchers.any())).thenReturn(c1);
 
 	mockMvc.perform(MockMvcRequestBuilders.post("/rest/searchacustomerbyID").contentType(MediaType.ALL_VALUE)
 		.content(objectMapper.writeValueAsString(4))).andDo(print()).andExpect(status().isOk())
 		.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-		.andExpect(jsonPath("firstname").value("pradeep"));
+		.andExpect(jsonPath("firstname").value("john"));
 
     }
 
@@ -108,10 +103,10 @@ public class ControllerTest {
 	Mockito.when(service.findCustomerByFirstname(Matchers.anyString())).thenReturn(customerArray);
 
 	mockMvc.perform(MockMvcRequestBuilders.post("/rest/searchacustomerbyfirstname").contentType(MediaType.ALL_VALUE)
-		.content(objectMapper.writeValueAsString("pradeep"))).andDo(print()).andExpect(status().isOk())
+		.content(objectMapper.writeValueAsString("john"))).andDo(print()).andExpect(status().isOk())
 		.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-		.andExpect(jsonPath("$[0].lastname").value("sadashiv"))
-		.andExpect(jsonPath("$[1].lastname").value("madkaiker"));
+		.andExpect(jsonPath("$[0].lastname").value("tester"))
+		.andExpect(jsonPath("$[1].lastname").value("developer"));
 
     }
 

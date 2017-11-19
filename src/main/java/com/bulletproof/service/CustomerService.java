@@ -51,7 +51,8 @@ public class CustomerService {
 	// Get the underlying session.
 	Session session = entityManager.unwrap(org.hibernate.Session.class);
 	Transaction tx = null;
-	tx = session.beginTransaction();
+	//tx = session.beginTransaction();
+	tx = session.getTransaction();
 	int i = 0;
 	for (Customer customer : customers) {
 
